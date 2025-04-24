@@ -71,6 +71,120 @@ export const getLoggedUserRepo = async (id: any) => {
         },
     ]).exec();
 };
+
+export const getPagedUserRepo = async (data: any) => {
+    const { pageIndex = 0, pageSize = 10, sortField = "createdAt", sortOrder = -1, filters = {} } = data;
+
+    const matchStage: any = {
+        archived: false,
+    };
+
+    // Search filter (on text field)
+    if (filters?.searchTerm) {
+        matchStage["text"] = {
+            $regex: filters.searchTerm,
+            $options: "i",
+        };
+    }
+
+    // Status filter
+    if (filters?.status === true || filters?.status === false) {
+        matchStage["active"] = filters.status;
+    }
+
+    // Department filter
+    if (filters?.depart) {
+        matchStage["department"] = new ObjectId(filters.depart);
+    }
+
+    const pipeline: any[] = [
+        {
+            $match: matchStage,
+        },
+        {
+            $lookup: {
+                from: "departments",
+                localField: "department",
+                foreignField: "_id",
+                as: "department",
+            },
+        },
+        {
+            $unwind: {
+                path: "$department",
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $lookup: {
+                from: "roles",
+                localField: "role",
+                foreignField: "_id",
+                as: "role",
+            },
+        },
+        {
+            $unwind: {
+                path: "$role",
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                refNo: 1,
+                name: {
+                    $concat: [
+                        { $ifNull: ["$firstname", ""] },
+                        " ",
+                        { $ifNull: ["$lastname", ""] },
+                        " ",
+                        { $ifNull: ["$email", ""] },
+                        " ",
+                        { $ifNull: ["$mobile", ""] },
+                        " ",
+                        { $ifNull: ["$department.depName", ""] },
+                    ],
+                },
+                email: 1,
+                imageUrl: 1,
+                active: 1,
+                nic: 1,
+                mobile: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                "role.name": 1,
+                "department.depName": 1,
+            },
+        },
+        
+        {
+            $sort: {
+                [sortField]: sortOrder === -1 ? -1 : 1,
+            },
+        },
+        {
+            $facet: {
+                data: [
+                    { $skip: pageIndex * pageSize },
+                    { $limit: pageSize },
+                ],
+                total: [
+                    { $count: "count" },
+                ],
+            },
+        },
+    ];
+
+    const result = await User.aggregate(pipeline).exec();
+    const users = result[0]?.data || [];
+    const total = result[0]?.total?.[0]?.count || 0;
+
+    return {
+        users,
+        total,
+    };
+};
 export const findOneAndUpdateUserRepo = async (filters: any, data: any) => {
     if (data.password) {
         if (validatePassword(data.password)) {

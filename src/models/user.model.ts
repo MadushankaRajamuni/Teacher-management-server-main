@@ -3,6 +3,7 @@ import { Document, model, Schema } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import { isEmail } from "validator";
 import { IRole } from "./role.model";
+import { IDepartment} from "./department.model";
 
 export interface IUser extends Document {
     _id: string;
@@ -10,7 +11,9 @@ export interface IUser extends Document {
     refNo: string;
     firstname: string;
     lastname: string;
+    nic: string;
     email: string;
+    department: IDepartment;
     imageUrl: string;
     active: boolean;
     mobile: string;
@@ -36,6 +39,10 @@ export const UserSchema = new Schema<IUser>(
             ref: "roles",
             required: [true, "Role is required"],
         },
+        nic: {
+                type: String,
+                required: [true, "NIC number is required"],
+            },
         email: {
             type: String,
             unique: true,
@@ -44,6 +51,11 @@ export const UserSchema = new Schema<IUser>(
             validator: [isEmail, "Invalid Email"],
             lowercase: true,
         },
+        department: {
+                type: Schema.Types.ObjectId,
+                ref: "departments",
+                required: [true, "Department is required"],
+            },
         password: {
             type: String,
             required: [true, "Password is required"],

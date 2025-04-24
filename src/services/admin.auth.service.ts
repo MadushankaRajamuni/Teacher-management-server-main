@@ -4,7 +4,7 @@ import {
     createUserPwReset,
     createUserRepo, findOneAndUpdateUserRepo,
     findOneUserRepo, findUserPwResetToken, findUserPwResetTokenAndDelete,
-    getLoggedUserRepo
+    getLoggedUserRepo,getPagedUserRepo
 } from "../data-access/admin.repo";
 import bcrypt from "bcrypt";
 import {SETTINGS} from "../constants/commons.settings";
@@ -92,6 +92,13 @@ export const getOneUserService = async (id: any) => {
       throw e
   }
 
+};
+export const getPagedUserService = async (data: any) => {
+    try {
+        return await getPagedUserRepo(data);
+    } catch (e) {
+        throw e;
+    }
 };
 
 export const requestUserPasswordResetService = async (email: any, userType: any) => {

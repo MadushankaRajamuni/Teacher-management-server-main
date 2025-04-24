@@ -4,7 +4,8 @@ import {
     createUserService,
     getOneUserService,
     logoutUserService, requestUserPasswordResetService,
-    signInUserService, validateAndUpdateUserPwService, validateUserPWResetTokenService
+    signInUserService, validateAndUpdateUserPwService, validateUserPWResetTokenService,
+    getPagedUserService
 } from "../services/admin.auth.service";
 import {validateRefreshTokenReq} from "../services/token.service";
 import {SETTINGS} from "../constants/commons.settings";
@@ -112,6 +113,19 @@ export const updateUserPasswordController = async (req: any, res: any) => {
         res.send(data);
         log.info("Resetting Password completed");
     } catch (e) {
+        return res.status(400).send(e);
+    }
+};
+
+
+export const getPagedUserController = async (req: any, res: any) => {
+    log.info("Getting paged Users");
+    try {
+        const data = await getPagedUserService(req.body);
+        res.send(data);
+        log.info("Getting paged Users completed");
+    } catch (e) {
+        log.error(JSON.stringify(e));
         return res.status(400).send(e);
     }
 };
