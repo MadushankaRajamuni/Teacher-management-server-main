@@ -146,6 +146,8 @@ export const getPagedUserRepo = async (data: any) => {
                         { $ifNull: ["$department.depName", ""] },
                     ],
                 },
+                firstname:1,
+                lastname:1,
                 email: 1,
                 imageUrl: 1,
                 active: 1,
@@ -157,7 +159,7 @@ export const getPagedUserRepo = async (data: any) => {
                 "department.depName": 1,
             },
         },
-        
+
         {
             $sort: {
                 [sortField]: sortOrder === -1 ? -1 : 1,
