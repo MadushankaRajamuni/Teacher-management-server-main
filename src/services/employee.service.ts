@@ -27,7 +27,7 @@ export const createEmployeeService = async (data: any, reqUserId: any) => {
                         name: employee.firstname + " " + employee.lastname,
                     },
                     employee.email,
-                    `Welcome to Teacher Management System`
+                    `Welcome to SALARMan System`
                 );
             }
             return employee;

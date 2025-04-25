@@ -1,7 +1,7 @@
 {
   "server": {
     "port": 3000,
-    "welcomeMessage": "Teacher Management System Server Listening on Development Mode"
+    "welcomeMessage": "SALARMan System Server Listening on Development Mode"
   },
   "db": {
     "path": "mongodb+srv://easytravelappnipun:nuLV9MTVegi8F3QS@easytravelapp.jcifyj4.mongodb.net/edhirya?retryWrites=true&w=majority&appName=EasyTravelApp"

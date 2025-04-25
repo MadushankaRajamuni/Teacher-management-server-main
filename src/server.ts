@@ -23,5 +23,5 @@ app.use(fileUpload());
 routes(app);
 
 app.listen(port, () => {
-    log.info(`Teacher management Server v${process.env.npm_package_version} started on PORT ${port}`);
+    log.info(`SALARMan System Server v${process.env.npm_package_version} started on PORT ${port}`);
 });

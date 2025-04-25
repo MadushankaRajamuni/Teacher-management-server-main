@@ -75,7 +75,7 @@ export const createUserService = async (data: any) => {
                     url: `${config.get("frontEndUrl")}/auth/login`.toString(),
                 },
                 admin.email,
-                `Welcome to Teacher Management System`
+                `Welcome to SALARMan System`
             );
             admin.password = undefined;
             return admin;

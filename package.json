@@ -1,5 +1,5 @@
 {
-  "name": "teacher-management-server",
+  "name": "salarman-system-server",
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
