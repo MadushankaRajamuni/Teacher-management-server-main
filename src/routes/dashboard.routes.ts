@@ -31,13 +31,19 @@ router.get('/summary', async (req, res) => {
       toDate: { $gte: today },
     });
     console.log('Leaves today:', leavesToday);
-    console.log('Date range:', { today, tomorrow });
+
+    // Add pending approvals count
+    const pendingApprovals = await LeaveModel.countDocuments({
+      status: 'Pending'
+    });
+    console.log('Pending approvals:', pendingApprovals);
 
     const summary = { 
       departments, 
       employees, 
       users, 
       leavesToday,
+      pendingApprovals, // Add this to the response
       timestamp: new Date().toISOString()
     };
     console.log('Sending summary:', summary);
