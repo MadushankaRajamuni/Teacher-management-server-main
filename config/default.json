@@ -24,13 +24,13 @@
     }
   },
   "aws-s3": {
-    "accessKeyId": "AKIA6ELKNUZR4U7GNP6F",
-    "baseUrl": "https://nipundev.s3.eu-north-1.amazonaws.com",
-    "bucketName": "nipundev",
-    "folder": "teacher",
+    "accessKeyId": "AKIATTSKFQ5LPBYJAIDB",
+    "baseUrl": "https://akshyadev.s3.eu-north-1.amazonaws.com",
+    "bucketName": "akshyadev",
+    "folder": "sekar-mit",
     "hostedZoneName": "",
     "region": "eu-north-1",
-    "secretAccessKey": "ffFecKGDlWJK+JXau0fhVLTtenkEYlcRiiNC+24K"
+    "secretAccessKey": "qMVi65I1dpOxuPkhRbjH7tJM/Kv7k5jRr9eVM1fJ"
   },
   "email": {
     "user": "europcarchatgpttransfer@gmail.com",

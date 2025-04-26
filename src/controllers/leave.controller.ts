@@ -1,5 +1,10 @@
 import { log } from "../util/logger";
-import { createLeaveService, getPagedLeaveService, findOneAndUpdateLeaveService } from "../services/leave.service";
+import {
+    createLeaveService,
+    getPagedLeaveService,
+    findOneAndUpdateLeaveService,
+    getLeaveSummeryTeacherService
+} from "../services/leave.service";
 
 export const createLeaveController = async (req: any, res: any) => {
     log.info("Creating leave request");
@@ -60,6 +65,18 @@ export const findOneAndUpdateLeaveController = async (req: any, res: any) => {
         const result = await findOneAndUpdateLeaveService(_id, status);
         res.send(result);
         log.info("Updating Leave completed");
+    } catch (e) {
+        log.error("Error updating leave: " + JSON.stringify(e));
+        res.status(400).send(e);
+    }
+};
+export const getLeaveSummeryTeacherController = async (req: any, res: any) => {
+    log.info("get leave summer");
+    try {
+        log.info("Request payload: " + JSON.stringify(req.body));
+        const result = await getLeaveSummeryTeacherService(req.params.id);
+        res.send(result);
+        log.info("get leave summer completed");
     } catch (e) {
         log.error("Error updating leave: " + JSON.stringify(e));
         res.status(400).send(e);

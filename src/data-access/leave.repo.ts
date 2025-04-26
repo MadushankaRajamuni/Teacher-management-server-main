@@ -147,6 +147,7 @@ import { createLeaveRefNo } from "../util/refferenceNumbers";
 import { Types } from "mongoose";
 const ObjectId = Types.ObjectId;
 
+
 export const createLeaveRepo = async (data: any) => {
  
   if (!data.refNo) {
@@ -281,4 +282,46 @@ export const getPagedLeaveRepo = async (data: any) => {
       },
     },
   ]).exec();
+};
+
+// Updated function to handle paginated leave data
+export const getLeaveSummeryTeacherRepo = async (id:any) => {
+      // res.json(result[0] || { sickLeaveCount: 0, casualLeaveCount: 0, earnedLeaveCount: 0 });
+
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59, 999);
+
+    return await LeaveModel.aggregate([
+      {
+        $match: {
+          teacherName: id,
+          createdAt: {
+            $gte: startOfMonth,
+            $lte: endOfMonth }
+        }
+      },
+
+      {
+        $group: {
+          _id: '$category',
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          sick: { $sum: { $cond: [{ $eq: ['$_id', 'SICK'] }, '$count', 0] } },
+          casual: { $sum: { $cond: [{ $eq: ['$_id', 'CASUAL'] }, '$count', 0] } },
+          earned: { $sum: { $cond: [{ $eq: ['$_id', 'EARNED'] }, '$count', 0] } }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          sick: 1,
+          casual: 1,
+          earned: 1
+        }
+      }
+    ]).exec();
 };

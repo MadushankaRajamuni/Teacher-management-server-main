@@ -1,5 +1,10 @@
 import { ILeave } from "../models/leave.model"; 
-import { createLeaveRepo , getPagedLeaveRepo, findOneAndUpdateLeaveRepo} from "../data-access/leave.repo";
+import {
+    createLeaveRepo,
+    getPagedLeaveRepo,
+    findOneAndUpdateLeaveRepo,
+    getLeaveSummeryTeacherRepo
+} from "../data-access/leave.repo";
 
 export const createLeaveService = async (data: ILeave, userId: string): Promise<ILeave> => {
     try {
@@ -37,6 +42,19 @@ export const findOneAndUpdateLeaveService = async (id: string, status: string) =
         }
 
         return await findOneAndUpdateLeaveRepo(id, status);
+    } catch (e) {
+        throw e;
+    }
+};
+export const getLeaveSummeryTeacherService = async (id: string) => {
+    try {
+        const data = (await getLeaveSummeryTeacherRepo(id))[0] || {
+            _id: id,
+            sick: 0,
+            casual: 0,
+            earned: 0
+        }
+        return data;
     } catch (e) {
         throw e;
     }

@@ -78,12 +78,15 @@ export const getPagedUserRepo = async (data: any) => {
     const matchStage: any = {
         archived: false,
     };
+    let searchTermFilter = {}
 
     // Search filter (on text field)
     if (filters?.searchTerm) {
-        matchStage["text"] = {
-            $regex: filters.searchTerm,
-            $options: "i",
+        searchTermFilter = {
+            text: {
+                $regex: filters?.searchTerm,
+                $options: "i",
+            }
         };
     }
 
@@ -133,7 +136,7 @@ export const getPagedUserRepo = async (data: any) => {
             $project: {
                 _id: 1,
                 refNo: 1,
-                name: {
+                text: {
                     $concat: [
                         { $ifNull: ["$firstname", ""] },
                         " ",
@@ -159,7 +162,11 @@ export const getPagedUserRepo = async (data: any) => {
                 "department.depName": 1,
             },
         },
-
+        {
+            $match: {
+                ...searchTermFilter
+            },
+        },
         {
             $sort: {
                 [sortField]: sortOrder === -1 ? -1 : 1,
